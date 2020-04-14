@@ -35,7 +35,7 @@ app.put("/repositories/:id", (request, response) => {
   if(repositoryIndex < 0){
     return response.status(400).json({ error: 'repositório nao encontrado'})
   }
-  const repository = { id, title, url, techs}
+  const repository = { id, title, url, techs, likes:repositories[repositoryIndex].likes }
   repositories[repositoryIndex] = repository;
   return response.status(200).json(repository)
 });
@@ -51,7 +51,14 @@ app.delete("/repositories/:id", (request, response) => {
 });
 
 app.post("/repositories/:id/like", (request, response) => {
-  // TODO
+  const {id} = request.params;
+  const repositoryIndex = repositories.findIndex(repository => repository.id === id );
+  if(repositoryIndex < 0){
+    return response.status(400).json({ error: 'repositório nao encontrado'})
+  }
+  repositories[repositoryIndex].likes ++;
+
+  return response.json(repositories[repositoryIndex])
 });
 
 module.exports = app;
